@@ -3,16 +3,13 @@
 This is a Minesweeper game written in Golang, using the Fyne library for the graphical user interface.
 
 ## Architecture
-The game is architected using the Model-View-Controller (MVC) pattern, with additional packages for the command-line interface (CLI) and build configuration.
+The game is architected using the layered architecture, using the main layers Model and View, with additional packages for the command-line interface (CLI) and build configuration.
 
 ### Model
 The model package contains the game logic for Minesweeper. This includes the game board, mines, and methods for updating the board as the player makes moves.
 
 ### View
 The view package contains the Fyne GUI code for rendering the game window and board. It also handles player input, such as mouse clicks, and updates the game model as necessary.
-
-### Controller
-The controller package serves as the bridge between the view and model packages. It handles requests from the view to update the game model, and updates the view with the current state of the game.
 
 ### CLI
 The cmd package contains a command-line interface for running the game. This can be used as an alternative to the Fyne GUI, or for automated testing.
