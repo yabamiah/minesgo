@@ -45,4 +45,4 @@ The game is won when all non-mine squares are revealed, and lost when a mine is 
 If you would like to contribute to the Minesweeper game, you are welcome to fork this repository and submit a pull request with your changes. Please make sure to follow the contribution guidelines when submitting your pull request.
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE]() file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/yabamiah/minesgo/blob/main/LICENSE) file for details.
