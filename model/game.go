@@ -15,12 +15,12 @@ type Game struct {
 }
 
 func (g *Game) uncoverCell() {
-	if (g.board.cells[0].isMine) {
-		g.board.cells[0].cellContent = CELL_CONTENT_MINE
-		g.board.cells[0].isRevealed = true	
+	if (g.board.cells["00"].isMine) {
+		g.board.cells["00"].cellContent = CELL_CONTENT_MINE
+		g.board.cells["00"].isRevealed = true	
 	} else {
-		g.board.cells[0].cellContent = CELL_CONTENT_EMPTY
-		g.board.cells[0].isRevealed = true
+		g.board.cells["00"].cellContent = CELL_CONTENT_EMPTY
+		g.board.cells["00"].isRevealed = true
 	}
 }
 
