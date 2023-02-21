@@ -3,6 +3,7 @@ package view
 import (
     "image/color"
     "fyne.io/fyne/v2"
+    "fyne.io/fyne/v2/layout"
     "fyne.io/fyne/v2/canvas"
 )
 
@@ -13,4 +14,11 @@ func NewText(text string, size float32, alignment fyne.TextAlign, textStyle fyne
     t.Alignment = alignment
     t.TextStyle = textStyle
     return t
+}
+
+func NewMainContent(header, footer *fyne.Container) *fyne.Container {
+    return fyne.NewContainerWithLayout(layout.NewBorderLayout(header, footer, nil, nil),
+        header,
+        footer,
+    )
 }
