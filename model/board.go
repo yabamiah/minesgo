@@ -1,8 +1,9 @@
 package model
 
 import (
-	"math/rand"
 	"fmt"
+	"log"
+	"math/rand"
 )
 
 type Board struct {
@@ -12,41 +13,97 @@ type Board struct {
 	cells map[string]*Cell // cells of the board
 }
 	
-	// PlaceMines randomly places mines on the board
-	func (b *Board) PlaceMines() {
-		if (b.columns == 9 && b.rows == 9) {
-			b.qtdMines = 10
-		} else if (b.columns == 18 && b.rows == 18) {
-			b.qtdMines = 40
-		} else {
-			b.qtdMines = 99
-		}
+// PlaceMines randomly places mines on the board
+func (b *Board) PlaceMines() {
+	if (b.columns == 9 && b.rows == 9) {
+		b.qtdMines = 10
+	} else if (b.columns == 18 && b.rows == 18) {
+		b.qtdMines = 40
+	} else {
+		b.qtdMines = 99
+	}
 
-		for i := 0; i < b.qtdMines; i++ {
-			for {
-				x := rand.Intn(b.columns)
-				y := rand.Intn(b.rows)
-				key := fmt.Sprintf("%d,%d", x, y)
-				if cell, exists := b.cells[key]; exists {
-					if !cell.isMine {
-						cell.isMine = true
-						break
-					}
+	for i := 0; i < b.qtdMines; i++ {
+		for {
+			x := rand.Intn(b.columns)
+			y := rand.Intn(b.rows)
+			key := fmt.Sprintf("%d,%d", x, y)
+			if cell, exists := b.cells[key]; exists {
+				if !cell.isMine {
+					cell.isMine = true
+					break
+				}
 				} else {
 					b.cells[key] = &Cell{}
 					b.cells[key].isMine = true
 					break
 				}
 			}
-		}
-	}	
+	}
+}	
+
+func (b *Board) uncoverCell(pos string) {
+	if (b.cells[pos].isMine) {
+		b.cells[pos].cellContent = CELL_CONTENT_MINE
+		b.cells[pos].isRevealed = true	
+	} else {
+		b.cells[pos].cellContent = CELL_CONTENT_EMPTY
+		b.cells[pos].isRevealed = true
+	}
+}
 
 // calculateSurroundingMines calculates the number of mines surrounding a cell
-func (b *Board) CalculateSurroundingMines(col, row int) int {
-	for i := 0; i < b.columns; i++ {
-		for j := 0; j < b.rows; j++ {
-			return 0;
-		}
+func (b *Board) CalculateSurroundingMines(pos string) int {
+    surroundingCells := []string{
+		// Convert the position to a string
+        fmt.Sprintf("%d,%d", b.getCellX(pos)-1, b.getCellY(pos)-1),
+        fmt.Sprintf("%d,%d", b.getCellX(pos)-1, b.getCellY(pos)),
+        fmt.Sprintf("%d,%d", b.getCellX(pos)-1, b.getCellY(pos)+1),
+        fmt.Sprintf("%d,%d", b.getCellX(pos), b.getCellY(pos)-1),
+        fmt.Sprintf("%d,%d", b.getCellX(pos), b.getCellY(pos)+1),
+        fmt.Sprintf("%d,%d", b.getCellX(pos)+1, b.getCellY(pos)-1),
+        fmt.Sprintf("%d,%d", b.getCellX(pos)+1, b.getCellY(pos)),
+        fmt.Sprintf("%d,%d", b.getCellX(pos)+1, b.getCellY(pos)+1),
+    }
+    
+    var count int
+	// Check if the cell exist and if the cell is a mine
+    for _, cellPos := range surroundingCells {
+        if cell := b.getCell(cellPos); cell != nil && cell.isMine {
+            count++
+        }
+    }
+    
+    return count
+}
+
+// getCell returns a cell through its position
+func (b *Board) getCell(pos string) *Cell {
+    cell, exists := b.cells[pos]
+    if !exists {
+        return nil
+    }
+    return cell
+}
+
+// getCellX returns the x coordinate of a cell
+func (b *Board) getCellX(pos string) int {
+	var x, y int
+    _, err := fmt.Sscanf(pos, "%d,%d", &x, &y)
+
+	if err != nil {
+		log.Fatal(err)
 	}
-	return 0;
+    return x
+}
+
+// getCellY returns the y coordinate of a cell
+func (b *Board) getCellY(pos string) int {
+	var x, y int
+	_, err := fmt.Sscanf(pos, "%d,%d", &x, &y)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+    return y
 }
