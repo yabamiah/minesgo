@@ -9,6 +9,8 @@ import (
 	"fyne.io/fyne/v2/theme"
 )
 
+var flag string
+
 func NewGameScreen(window fyne.Window) {
 	// Create a title label with a large font size
 	title := NewText("New Game", 42, fyne.TextAlignCenter, fyne.TextStyle{Bold: true, Italic: false})
@@ -19,21 +21,20 @@ func NewGameScreen(window fyne.Window) {
 	// Create a select to choose the game difficulty
 	comboGameMode := widget.NewSelect([]string{"Easy", "Normal", "Hard", "Expert"}, func(value string) {
 		log.Println("Select the difficulty", value)
+		flag = value
 	})
 
 	// Create a button to start the game
 	startButton := widget.NewButtonWithIcon("Start", theme.MediaPlayIcon(), func() {
 		// NewGameScreen(window)
 	})
-	startButton.Resize(fyne.NewSize(50, 50))
+	startButton.Importance = widget.HighImportance
 
 
 	backButton := widget.NewButtonWithIcon("Back", theme.NavigateBackIcon(), func() {
 		// I still don't know how to go back to the previous screen
 	})
-	backButton.Resize(fyne.NewSize(50, 50))
-
-
+	backButton.Importance = widget.DangerImportance
 
 	// Use Fyne's layout system to position the widgets in the header
 	header := fyne.NewContainerWithLayout(layout.NewVBoxLayout(),
