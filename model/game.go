@@ -1,5 +1,10 @@
 package model
 
+import (
+	"math/rand"
+)
+
+// Type Flag is a string to define the game mode
 type Flag string
 const (
 	easy Flag = "Easy"
@@ -8,11 +13,32 @@ const (
 	expert Flag = "Expert"
 )
 
+
+// Game struct is the main struct of the game
 type Game struct {
-	board Board
-	gameOver bool
-	gameWon bool
-	modeGame Flag
+	board Board // Board is a struct
+	gameOver bool // gameOver is a bool
+	gameWon bool // gameWon is a bool
+	modeGame Flag // modeGame is a Flag
+}
+
+func NewGame(flag string) *Game {
+	return &Game{
+		board: Board{},
+		gameOver: false,
+		gameWon: false,
+		modeGame: Flag(flag),
+	}
+}
+
+func (g *Game) StartGame() {
+	g.flagBoard(g.modeGame)
+	g.firstClick()
+	g.board.PlaceMines()
+}
+
+func (g *Game) firstClick(x, y int) {
+	
 }
 
 func (g *Game) checkGameWon() {

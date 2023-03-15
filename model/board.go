@@ -6,11 +6,17 @@ import (
 	"math/rand"
 )
 
+// Board represents the board of the game
 type Board struct {
 	columns int // number of columns
 	rows int // number of rows
 	qtdMines int // number of mines
 	cells map[string]*Cell // cells of the board
+}
+
+// GetCellPos returns the position of the cell
+func (b *Board) GetCellPos() string {
+	return fmt.Sprintf("%d,%d", b.columns, b.rows)
 }
 	
 // PlaceMines randomly places mines on the board
@@ -42,6 +48,7 @@ func (b *Board) PlaceMines() {
 	}
 }	
 
+// uncoverCell uncovers a cell
 func (b *Board) uncoverCell(pos string) {
 	if (b.cells[pos].isMine) {
 		b.cells[pos].cellContent = CELL_CONTENT_MINE
@@ -69,7 +76,7 @@ func (b *Board) CalculateSurroundingMines(pos string) int {
     var count int
 	// Check if the cell exist and if the cell is a mine
     for _, cellPos := range surroundingCells {
-        if cell := b.getCell(cellPos); cell != nil && cell.isMine {
+        if cell := b.GetCell(cellPos); cell != nil && cell.isMine {
             count++
         }
     }
@@ -78,7 +85,7 @@ func (b *Board) CalculateSurroundingMines(pos string) int {
 }
 
 // getCell returns a cell through its position
-func (b *Board) getCell(pos string) *Cell {
+func (b *Board) GetCell(pos string) *Cell {
     cell, exists := b.cells[pos]
     if !exists {
         return nil

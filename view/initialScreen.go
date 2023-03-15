@@ -1,6 +1,8 @@
 package view
 
 import (
+    "image/color"
+
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/canvas"
@@ -8,6 +10,7 @@ import (
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
+    "fyne.io/fyne/v2/driver/desktop"
 )
 
 type InitialScreen struct {
@@ -36,6 +39,19 @@ func Initial() {
     // Create a title label with a large font size
     title := NewText("MinesGo", 42, fyne.TextAlignCenter, fyne.TextStyle{Bold: true, Italic: false})
     is.title = title
+
+    myCanvas := canvas.NewText("Click me!", color.Black)
+    meuclick := widget.Entry
+
+	meuclick = func(e *desktop.MouseEvent) {
+        if e.Button == desktop.LeftMouseButton {
+            myCanvas.Text = "Clicked!"
+            myCanvas.Refresh()
+        } else if e.Button == desktop.RightMouseButton {
+            myCanvas.Text = "Right clicked!"
+            myCanvas.Refresh()
+        }
+    }
 
     // Create a subtitle label with a smaller font size
     subtitle := widget.NewLabelWithStyle("Get ready to play!", fyne.TextAlignCenter, fyne.TextStyle{Bold: true, Italic: false})
