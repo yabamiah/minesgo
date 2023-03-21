@@ -1,8 +1,6 @@
 package view
 
 import (
-    "image/color"
-
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/canvas"
@@ -10,7 +8,6 @@ import (
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
-    "fyne.io/fyne/v2/driver/desktop"
 )
 
 type InitialScreen struct {
@@ -26,40 +23,19 @@ type InitialScreen struct {
     credits *widget.Label
 }
 
-func Initial() {
-    myApp := app.New()
-    window := myApp.NewWindow("MinesGo")
-    window.Resize(fyne.NewSize(400, 400))
-
-    is := InitialScreen{
-        app: myApp,
-        window: window,
-    }
-
-    // Create a title label with a large font size
+func (is *InitialScreen) initTitle() {
     title := NewText("MinesGo", 42, fyne.TextAlignCenter, fyne.TextStyle{Bold: true, Italic: false})
     is.title = title
+}
 
-    myCanvas := canvas.NewText("Click me!", color.Black)
-    meuclick := widget.Entry
-
-	meuclick = func(e *desktop.MouseEvent) {
-        if e.Button == desktop.LeftMouseButton {
-            myCanvas.Text = "Clicked!"
-            myCanvas.Refresh()
-        } else if e.Button == desktop.RightMouseButton {
-            myCanvas.Text = "Right clicked!"
-            myCanvas.Refresh()
-        }
-    }
-
-    // Create a subtitle label with a smaller font size
+func (is *InitialScreen) initSubtitle() {
     subtitle := widget.NewLabelWithStyle("Get ready to play!", fyne.TextAlignCenter, fyne.TextStyle{Bold: true, Italic: false})
     is.subtitle = subtitle
+}
 
-    // Create a button to start the game
+func (is *InitialScreen) initButtons() {
     newGameButton := widget.NewButtonWithIcon("New game", theme.MediaPlayIcon(), func() {
-        NewGameScreen(is.window)
+        InitialNewGameScreen(is.window)
     })
     newGameButton.Importance = widget.HighImportance
     is.newGameButton = newGameButton
@@ -69,8 +45,14 @@ func Initial() {
     })
     exitButton.Importance = widget.DangerImportance
     is.exitButton = exitButton
+}
 
-    // Use Fyne's layout system to position the widgets
+func (is *InitialScreen) initCredits() {
+    credits := widget.NewLabelWithStyle("© 2021 MinesGo by Yabamiah", fyne.TextAlignCenter, fyne.TextStyle{Bold: false, Italic: true})
+    is.credits = credits
+}
+
+func (is *InitialScreen) initWindow() {
     header := container.New(layout.NewVBoxLayout(),
         is.title,
         is.subtitle,
@@ -78,19 +60,41 @@ func Initial() {
         is.exitButton,
     )
 
-    // Create a label to display the game credits in the bottom of the screen
-    credits := widget.NewLabelWithStyle("© 2021 MinesGo by Yabamiah", fyne.TextAlignCenter, fyne.TextStyle{Bold: false, Italic: true})
-    is.credits = credits
-
-    // Create a footer container
     footer := container.New(layout.NewMaxLayout(),
-        is.credits,
+    is.credits,
     )
 
-    // Combine the content and footer containers
     mainContent := NewMainContent(header, footer)
-
-    // Set the content of the window and show it
+    is.window.CenterOnScreen()
     is.window.SetContent(mainContent)
-    is.window.ShowAndRun()
+}
+
+func (is *InitialScreen) initInitialScreen() {
+    is.initTitle()
+    is.initSubtitle()
+    is.initButtons()
+    is.initCredits()
+    is.initWindow()
+}
+
+func Initial() {
+    myTheme := BeutifulTheme{}
+
+    myApp := app.New()
+    myApp.Settings().SetTheme(myTheme)
+    
+    window := myApp.NewWindow("MinesGo")
+    window.Resize(fyne.NewSize(400, 400))
+
+    initialScreen := InitialScreen{ app: myApp, window: window }
+    initialScreen.initInitialScreen()
+
+    initialScreen.window.ShowAndRun()
+}
+
+func InitialBack(window fyne.Window) {
+    initialScreen := InitialScreen{ window: window }
+
+    initialScreen.initInitialScreen()
+    initialScreen.window.Show()
 }

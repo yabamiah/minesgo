@@ -4,58 +4,101 @@ import (
 	"log"
 
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/widget"
+	"fyne.io/fyne/v2/canvas"
+	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
+	"fyne.io/fyne/v2/widget"
 )
 
 var flag string
 
-func NewGameScreen(window fyne.Window) {
-	// Create a title label with a large font size
-	title := NewText("New Game", 42, fyne.TextAlignCenter, fyne.TextStyle{Bold: true, Italic: false})
-	
-	// Create a subtitle label with a smaller font size
-    subtitle := widget.NewLabelWithStyle("Choose game difficulty:", fyne.TextAlignCenter, fyne.TextStyle{Bold: false, Italic: false})
+type NewGame struct {
+	app fyne.App
+	window fyne.Window
 
-	// Create a select to choose the game difficulty
+	title *canvas.Text
+	subtitle *canvas.Text
+	credits *canvas.Text
+
+	comboGameMode *widget.Select
+	startButton *widget.Button
+	backButton *widget.Button
+}
+
+func (ng *NewGame) initTitle() {
+	title := NewText("New Game", 42, fyne.TextAlignCenter, fyne.TextStyle{Bold: true, Italic: false})
+	ng.title = title
+}
+
+func (ng *NewGame) initSubtitle() {
+	subtitle := NewText("Choose game difficulty:", 14, fyne.TextAlignCenter, fyne.TextStyle{Bold: false, Italic: false})
+	ng.subtitle = subtitle
+}
+
+func (ng *NewGame) initCredits() {
+	credits := NewText("© 2021 MinesGo by Yabamiah", 14, fyne.TextAlignCenter, fyne.TextStyle{Bold: false, Italic: true})
+	ng.credits = credits
+}
+
+func (ng *NewGame) initComboGameMode() {
 	comboGameMode := widget.NewSelect([]string{"Easy", "Normal", "Hard", "Expert"}, func(value string) {
 		log.Println("Select the difficulty", value)
 		flag = value
 	})
+	ng.comboGameMode = comboGameMode
+}
 
-	// Create a button to start the game
+func (ng *NewGame) initStartButton() {
 	startButton := widget.NewButtonWithIcon("Start", theme.MediaPlayIcon(), func() {
-		// NewGameScreen(window)
+		InitialGameScreen(ng.window)
 	})
 	startButton.Importance = widget.HighImportance
+	ng.startButton = startButton
+}
 
-
+func (ng *NewGame) initBackButton() {
 	backButton := widget.NewButtonWithIcon("Back", theme.NavigateBackIcon(), func() {
-		// I still don't know how to go back to the previous screen
+		InitialBack(ng.window)
 	})
 	backButton.Importance = widget.DangerImportance
+	ng.backButton = backButton
+}
 
-	// Use Fyne's layout system to position the widgets in the header
-	header := fyne.NewContainerWithLayout(layout.NewVBoxLayout(),
-        title,
-        subtitle,
-        comboGameMode,
-		startButton,
-		backButton,
-    )
-
-	// Create a label to display the game credits in the bottom of the screen
-	credits := widget.NewLabelWithStyle("© 2021 MinesGo by Yabamiah", fyne.TextAlignCenter, fyne.TextStyle{Bold: false, Italic: true})
-	footer := fyne.NewContainerWithLayout(layout.NewMaxLayout(),
-		credits,
+func (ng *NewGame) initWindow() {
+	header := container.New(layout.NewVBoxLayout(),
+		ng.title,
+		ng.subtitle,
+		ng.comboGameMode,
+		ng.startButton,
+		ng.backButton,
 	)
 
-	// Combine the content and footer containers
+	footer := container.New(layout.NewMaxLayout(),
+		ng.credits,
+	)
+
 	mainContent := NewMainContent(header, footer)
 
-    // Set the content of the window and show it
-    window.SetContent(mainContent)
-    window.Show()
+	ng.window.CenterOnScreen()
+	ng.window.SetContent(mainContent)
+}
 
+func (ng *NewGame) initNewGame() {
+	ng.initTitle()
+	ng.initSubtitle()
+	ng.initCredits()
+	ng.initComboGameMode()
+	ng.initStartButton()
+	ng.initBackButton()
+	ng.initWindow()
+}
+
+func InitialNewGameScreen(window fyne.Window) {
+	app := fyne.CurrentApp()
+
+	newGame := NewGame{app: app, window: window}
+	newGame.initNewGame()
+	
+	newGame.window.Show()
 }
