@@ -14,7 +14,7 @@ type BeutifulTheme struct{}
 func (BeutifulTheme) Color(c fyne.ThemeColorName, v fyne.ThemeVariant) color.Color {
 	switch c {
 	case theme.ColorNameBackground:
-		return color.NRGBA{R: 0x22, G: 0x22, B: 0x3b, A: 0xb0}
+		return color.NRGBA{R: 0x30, G: 0x30, B: 0x30, A: 0xff}
 	case theme.ColorNameButton:
 		return color.Alpha16{A: 0x0}
 	case theme.ColorNameDisabledButton:
@@ -22,11 +22,11 @@ func (BeutifulTheme) Color(c fyne.ThemeColorName, v fyne.ThemeVariant) color.Col
 	case theme.ColorNameDisabled:
 		return color.NRGBA{R: 0xff, G: 0xff, B: 0xff, A: 0x42}
 	case theme.ColorNameError:
-		return color.NRGBA{R: 0xe6, G: 0x39, B: 0x46, A: 0xff}
+		return color.NRGBA{R: 0xf4, G: 0x43, B: 0x36, A: 0xff}
 	case theme.ColorNameFocus:
-		return color.NRGBA{R: 0x9a, G: 0x8c, B: 0x98, A: 0x80}
+		return color.NRGBA{R: 0x21, G: 0x96, B: 0xf3, A: 0x7f}
 	case theme.ColorNameForeground:
-		return color.NRGBA{R: 0xf8, G: 0xf5, B: 0xf5, A: 0xff}
+		return color.NRGBA{R: 0x8e, G: 0x69, B: 0xea, A: 0xff}
 	case theme.ColorNameHover:
 		return color.NRGBA{R: 0xff, G: 0xff, B: 0xff, A: 0xf}
 	case theme.ColorNameInputBackground:
@@ -36,7 +36,7 @@ func (BeutifulTheme) Color(c fyne.ThemeColorName, v fyne.ThemeVariant) color.Col
 	case theme.ColorNamePressed:
 		return color.NRGBA{R: 0xff, G: 0xff, B: 0xff, A: 0x66}
 	case theme.ColorNamePrimary:
-		return color.NRGBA{R: 0x84, G: 0xa9, B: 0x8c, A: 0xcc}
+		return color.NRGBA{R: 0x21, G: 0x96, B: 0xf3, A: 0xff}
 	case theme.ColorNameScrollBar:
 		return color.NRGBA{R: 0x0, G: 0x0, B: 0x0, A: 0x99}
 	case theme.ColorNameShadow:

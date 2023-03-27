@@ -13,18 +13,20 @@ import (
 )
 
 type Game struct {
-	app     fyne.App
-	window  fyne.Window
+	app        fyne.App
+	window     fyne.Window
 
-	title   *canvas.Text
-	mines   *canvas.Text
-	subtitle *widget.Label
-	clock   *widget.Label
+	title      *canvas.Text
+	mines      *canvas.Text
+	clock      *widget.Label
 
-	board   *fyne.Container
-	cells   []fyne.CanvasObject
+	board      *fyne.Container
+	cells      []fyne.CanvasObject
 
-	gameOn  bool
+	gameOn       bool
+	qtdMines     int
+	gameState    string
+	cellRevealed bool
 	
 	buttonFlag *widget.Button
    	buttonMine *widget.Button
@@ -47,6 +49,7 @@ func (g *Game) initCells(tam int) {
 		cell.Icon = theme.QuestionIcon()
 		x, y := i%tam, i/tam
 		cell.OnTapped = func() {
+			g.cellRevealed = true
 			fmt.Println("tapped", x, y)
 		}
 	}
@@ -59,7 +62,9 @@ func (g *Game) initBoard() {
 
 func (g *Game) initTitle() {
 	title := NewText("MinesGo", 42, fyne.TextAlignCenter, fyne.TextStyle{Bold: true, Italic: false})
-	mines := NewText("8 mines", 14, fyne.TextAlignCenter, fyne.TextStyle{Bold: false, Italic: true})
+
+	g.qtdMines = 8
+	mines := NewText(" mines", 14, fyne.TextAlignCenter, fyne.TextStyle{Bold: false, Italic: true})
 	g.title = title
 	g.mines = mines
 }
@@ -71,12 +76,12 @@ func (g *Game) initClock() {
 
 func (g *Game) initButtons() {
 	g.buttonFlag = widget.NewButtonWithIcon("Flag", theme.ColorChromaticIcon() , func() {
-		fmt.Println("Flag")
+		g.gameState = "flag"
 	})
 	g.buttonFlag.Importance = widget.HighImportance
 
 	g.buttonMine = widget.NewButtonWithIcon("Mine", theme.ComputerIcon(), func() {
-		fmt.Println("Mine")
+		g.gameState = "mine"
 	})
 	g.buttonMine.Importance = widget.HighImportance
 	
@@ -116,6 +121,19 @@ func (g *Game) updateClock() {
 		g.clock.SetText(formatted)
 		time.Sleep(time.Second)
 	}
+}
+
+func (g *Game) updateMines() {
+	if g.gameState == "flag" {
+		g.buttonFlag.OnTapped = func() {
+			if g.cellRevealed {
+				g.qtdMines++
+			} else {
+				g.qtdMines--
+			}
+		}
+	}
+	g.mines.Text = fmt.Sprintf("%d mines", g.qtdMines)
 }
 
 func (g *Game) initGame(tam int) {

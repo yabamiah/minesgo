@@ -1,7 +1,7 @@
 package model
 
 import (
-	"math/rand"
+	//"math/rand"
 )
 
 // Type Flag is a string to define the game mode
@@ -33,7 +33,7 @@ func NewGame(flag string) *Game {
 
 func (g *Game) StartGame() {
 	g.flagBoard(g.modeGame)
-	g.firstClick()
+	//g.firstClick()
 	g.board.PlaceMines()
 }
 

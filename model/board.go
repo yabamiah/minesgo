@@ -114,3 +114,7 @@ func (b *Board) getCellY(pos string) int {
 	}
     return y
 }
+
+func (b *Board) GetQtdMines() int {
+	return b.qtdMines
+}
